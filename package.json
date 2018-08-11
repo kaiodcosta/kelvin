@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/FairDivinity/kelvin#readme",
   "dependencies": {
+    "sockjs": "^0.3.19",
     "ws": "^6.0.0"
   }
 }
