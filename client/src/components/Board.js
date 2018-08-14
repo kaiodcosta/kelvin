@@ -3,6 +3,8 @@ import { Chessground } from "chessground";
 import "../assets/chessground.css";
 import "../assets/theme.css";
 
+import { ranks2fen } from "../lib/ranks2fen";
+
 class Board extends Component {
 	constructor(props) {
 		super(props);
@@ -17,12 +19,29 @@ class Board extends Component {
 			board: Chessground(document.getElementById("board"), {})
 		});
 	}
+
+	componentDidUpdate() {
+		if (this.props.game != "") {
+			let myRelation = this.props.game.split(" ")[19];
+			let flip = this.props.game.split(" ")[30];
+			let fen = ranks2fen(
+				this.props.game
+					.split(" ")
+					.slice(1, 9)
+					.join(" ")
+			);
+
+			this.state.board.set({
+				fen: fen,
+				orientation: flip === "0" ? "white" : "white",
+				viewOnly: myRelation === "0" ? 1 : 0
+			});
+		}
+	}
 	render() {
 		return (
-			<div>
-				<div className="blue merida">
-					<div id="board" />
-				</div>
+			<div className="blue merida">
+				<div id="board" style={{ width: "400px", height: "400px" }} />
 			</div>
 		);
 	}

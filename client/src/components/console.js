@@ -19,9 +19,7 @@ class Console extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			socket: null,
-			command: "",
-			messages: []
+			command: ""
 		};
 		this.handleChange = this.handleChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
@@ -33,7 +31,7 @@ class Console extends Component {
 	}
 
 	handleSubmit(event) {
-		this.state.socket.send(this.state.command + "\r\n");
+		this.props.onCommand(this.state.command);
 		this.setState({ command: "" });
 		event.preventDefault();
 	}
@@ -43,15 +41,6 @@ class Console extends Component {
 	}
 
 	componentDidMount() {
-		const socket = new WebSocket("ws://localhost:8080");
-
-		this.setState({ socket: socket });
-		socket.addEventListener("message", event => {
-			console.log("Message from server ", event.data);
-			this.setState({
-				messages: [...this.state.messages, event.data]
-			});
-		});
 		this.scrollToBottom();
 	}
 	componentDidUpdate() {
@@ -59,9 +48,11 @@ class Console extends Component {
 	}
 
 	render() {
-		let messages = this.state.messages.map((message, key) => {
+		let messages = this.props.messages.map((message, key) => {
 			return (
-				<ListGroupItem key={key}>{<pre>{message}</pre>}</ListGroupItem>
+				<ListGroupItem key={key}>
+					<pre>{message}</pre>
+				</ListGroupItem>
 			);
 		});
 		return (

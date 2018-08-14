@@ -7,33 +7,42 @@ class Game extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			wName: "Magnus Carlsen",
-			bName: "Fabiano Caruana",
-			wRating: 2824,
-			bRating: 2810,
-			wTime: 231,
-			bTime: 200,
-			variant: "",
-			pgn: {}
+			white: {
+				name: "",
+				rating: 0,
+				time: 0
+			},
+			black: {
+				name: "",
+				rating: 0,
+				time: 0
+			}
 		};
 	}
 	render() {
+		let white = (
+			<CardHeader>
+				<span> {this.props.game.split(" ")[17]}</span>
+				<span> {this.state.white.rating}</span>
+				<span style={{ float: "right" }}> {this.state.white.time}</span>
+			</CardHeader>
+		);
+		let black = (
+			<CardFooter>
+				<span> {this.props.game.split(" ")[18]}</span>
+				<span> {this.state.black.rating}</span>
+				<span style={{ float: "right" }}> {this.state.black.time}</span>
+			</CardFooter>
+		);
 		return (
 			<Card border-primary>
-				<CardHeader>
-					<span> {this.state.wName}</span>
-					<span> {this.state.wRating}</span>
-					<span style={{ float: "right" }}> {this.state.wTime}</span>
-				</CardHeader>
+				{this.props.game.split(" ")[30] === "0" ? black : white}
 
 				<CardBody style={{ padding: "0" }}>
-					<Board />
+					<Board game={this.props.game} />
 				</CardBody>
-				<CardHeader>
-					<span> {this.state.bName}</span>
-					<span> {this.state.bRating}</span>
-					<span style={{ float: "right" }}> {this.state.bTime}</span>
-				</CardHeader>
+
+				{this.props.game.split(" ")[30] === "0" ? white : black}
 			</Card>
 		);
 	}
