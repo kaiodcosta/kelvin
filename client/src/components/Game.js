@@ -23,14 +23,12 @@ class Game extends Component {
 		let white = (
 			<CardHeader>
 				<span> {this.props.game.split(" ")[17]}</span>
-				<span> {this.state.white.rating}</span>
 				<span style={{ float: "right" }}> {this.state.white.time}</span>
 			</CardHeader>
 		);
 		let black = (
 			<CardFooter>
 				<span> {this.props.game.split(" ")[18]}</span>
-				<span> {this.state.black.rating}</span>
 				<span style={{ float: "right" }}> {this.state.black.time}</span>
 			</CardFooter>
 		);

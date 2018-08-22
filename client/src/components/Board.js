@@ -9,7 +9,6 @@ class Board extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			config: {},
 			board: null
 		};
 	}
@@ -21,7 +20,7 @@ class Board extends Component {
 	}
 
 	componentDidUpdate() {
-		if (this.props.game != "") {
+		if (this.props.game !== "") {
 			let myRelation = this.props.game.split(" ")[19];
 			let flip = this.props.game.split(" ")[30];
 			let fen = ranks2fen(
@@ -34,7 +33,7 @@ class Board extends Component {
 			this.state.board.set({
 				fen: fen,
 				orientation: flip === "0" ? "white" : "white",
-				viewOnly: myRelation === "0" ? 1 : 0
+				viewOnly: myRelation === "0" ? true : false
 			});
 		}
 	}

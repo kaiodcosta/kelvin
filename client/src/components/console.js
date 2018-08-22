@@ -80,7 +80,13 @@ class Console extends Component {
 							size="sm"
 						/>
 						<InputGroupAddon addonType="append">
-							<Input type="submit" value="Send" size="sm" />
+							<Input
+								className="btn-primary"
+								type="submit"
+								value="Send"
+								size="sm"
+								color="primary"
+							/>
 						</InputGroupAddon>
 					</InputGroup>
 				</Form>
