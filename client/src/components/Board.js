@@ -1,11 +1,11 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import { Chessground } from "chessground";
 import "../assets/chessground.css";
 import "../assets/theme.css";
 
 import { ranks2fen } from "../lib/ranks2fen";
 
-class Board extends Component {
+class Board extends PureComponent {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -20,9 +20,14 @@ class Board extends Component {
 	}
 
 	componentDidUpdate() {
+		// TODO put this on a function
 		if (this.props.game !== "") {
 			let myRelation = this.props.game.split(" ")[19];
 			let flip = this.props.game.split(" ")[30];
+
+			// castle move not verbose
+
+			// let lastMove = this.props.game.split(" ")[27].split("/")[1].split("-");
 			let fen = ranks2fen(
 				this.props.game
 					.split(" ")
@@ -30,13 +35,15 @@ class Board extends Component {
 					.join(" ")
 			);
 
+			console.log("resetting cg");
 			this.state.board.set({
 				fen: fen,
-				orientation: flip === "0" ? "white" : "white",
-				viewOnly: myRelation === "0" ? true : false
+				movable: { free: myRelation === "0" ? false : true },
+				orientation: flip === "0" ? "white" : "black"
 			});
 		}
 	}
+
 	render() {
 		return (
 			<div className="blue merida">

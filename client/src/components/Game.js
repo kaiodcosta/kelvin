@@ -1,35 +1,18 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import Board from "./Board";
 
 import { Card, CardBody, CardHeader, CardFooter } from "reactstrap";
 
-class Game extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			white: {
-				name: "",
-				rating: 0,
-				time: 0
-			},
-			black: {
-				name: "",
-				rating: 0,
-				time: 0
-			}
-		};
-	}
+class Game extends PureComponent {
 	render() {
 		let white = (
 			<CardHeader>
 				<span> {this.props.game.split(" ")[17]}</span>
-				<span style={{ float: "right" }}> {this.state.white.time}</span>
 			</CardHeader>
 		);
 		let black = (
 			<CardFooter>
 				<span> {this.props.game.split(" ")[18]}</span>
-				<span style={{ float: "right" }}> {this.state.black.time}</span>
 			</CardFooter>
 		);
 		return (

@@ -46,7 +46,6 @@ class Console extends Component {
 	componentDidUpdate() {
 		this.scrollToBottom();
 	}
-
 	render() {
 		let messages = this.props.messages.map((message, key) => {
 			return (
