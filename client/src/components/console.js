@@ -12,7 +12,8 @@ import { ListGroup, ListGroupItem } from "reactstrap";
 
 const cardStyle = {
 	height: "500px",
-	overflowY: "auto"
+	overflowY: "auto",
+	fontSize: "11px"
 };
 
 class Console extends Component {

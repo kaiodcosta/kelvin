@@ -56,7 +56,7 @@ class App extends Component {
         <Container>
           <Row>
             <Col xs="auto" className="mt-5">
-              <Game game={this.state.game} />
+              <Game game={this.state.game} onMove={this.sendCommand} />
             </Col>
             <Col xs="6" className="mt-4">
               <Console

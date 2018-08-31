@@ -13,9 +13,12 @@ class Board extends PureComponent {
 		};
 	}
 
+	onMove(from, to) {}
 	componentDidMount() {
 		this.setState({
-			board: Chessground(document.getElementById("board"), {})
+			board: Chessground(document.getElementById("board"), {
+				onMove: this.onMove(from, to)
+			})
 		});
 	}
 
