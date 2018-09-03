@@ -4,9 +4,18 @@ import Chess from "chess.js";
 import "../assets/chessground.css";
 import "../assets/theme.css";
 
-import { ranks2fen } from "../lib/ranks2fen";
+import { style12 } from "../lib/style12";
 
 import { Card, CardBody, CardHeader, CardFooter } from "reactstrap";
+
+function toDests(chess) {
+	const dests = {};
+	chess.SQUARES.forEach(s => {
+		const ms = chess.moves({ square: s, verbose: true });
+		if (ms.length) dests[s] = ms.map(m => m.to);
+	});
+	return dests;
+}
 
 class Game extends PureComponent {
 	constructor(props) {
@@ -15,10 +24,42 @@ class Game extends PureComponent {
 			board: null
 		};
 		this.onMove = this.onMove.bind(this);
+		this.updateBoard = this.updateBoard.bind(this);
 	}
 
 	onMove(from, to, captured) {
 		this.props.onMove(from + to);
+	}
+
+	updateBoard() {
+		let chess = new Chess();
+		if (this.props.game !== "") {
+			let myRelation = this.props.game.split(" ")[19];
+			let flip = this.props.game.split(" ")[30];
+			let moveNumber = this.props.game.split(" ")[26];
+			let move = this.props.game.split(" ")[29];
+			let color = this.props.game.split(" ")[9];
+			// castle move not verbose
+
+			// let lastMove = this.props.game.split(" ")[27].split("/")[1].split("-");
+			let fen = style12(
+				this.props.game
+					.split(" ")
+					.slice(1, 9)
+					.join(" ")
+			);
+
+			chess.load(fen + " " + color.toLowerCase() + " - - 0 1");
+			console.log("resetting cg", chess.fen());
+			console.log("fen:", fen + " " + color);
+			this.state.board.set({
+				fen: fen,
+				movable: {
+					dests: toDests(chess)
+				},
+				orientation: flip === "0" ? "white" : "black"
+			});
+		}
 	}
 	componentDidMount() {
 		this.setState({
@@ -30,32 +71,7 @@ class Game extends PureComponent {
 	}
 
 	componentDidUpdate() {
-		let chess = new Chess();
-		// TODO put this on a function
-		if (this.props.game !== "") {
-			let myRelation = this.props.game.split(" ")[19];
-			let flip = this.props.game.split(" ")[30];
-			let moveNumber = this.props.game.split(" ")[26];
-			let move = this.props.game.split(" ")[29];
-			// castle move not verbose
-
-			// let lastMove = this.props.game.split(" ")[27].split("/")[1].split("-");
-			let fen = ranks2fen(
-				this.props.game
-					.split(" ")
-					.slice(1, 9)
-					.join(" ")
-			);
-
-			chess.load(fen);
-			console.log("resetting cg");
-			console.log("fen:", fen);
-			this.state.board.set({
-				fen: fen,
-				movable: { free: myRelation === "0" ? false : true },
-				orientation: flip === "0" ? "white" : "black"
-			});
-		}
+		this.updateBoard();
 	}
 	render() {
 		let white = (
