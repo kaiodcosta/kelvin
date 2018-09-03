@@ -29,5 +29,5 @@
 
 // single-liner
 export function style12(str) {
-	return str.replace(/ /, "/").replace(/-+/, m => m.length);
+	return str.replace(/ /g, "/").replace(/-+/g, m => m.length);
 }
