@@ -8,16 +8,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/FairDivinity/kelvin.git"
+    "url": "git+https://github.com/flurt/kelvin.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/FairDivinity/kelvin/issues"
+    "url": "https://github.com/flurt/kelvin/issues"
   },
-  "homepage": "https://github.com/FairDivinity/kelvin#readme",
+  "homepage": "https://github.com/flurt/kelvin#readme",
   "dependencies": {
-    "sockjs": "^0.3.19",
     "ws": "^6.0.0"
   }
 }
