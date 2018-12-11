@@ -15,7 +15,7 @@ wss.on("connection", function(ws) {
 	var fics = net.createConnection(5000, "freechess.org");
 	fics.setEncoding("utf8");
 	fics.on("data", function(data) {
-		if (ws.readyState != WebSocket.CLOSED) {
+		if (ws.readyState !== WebSocket.CLOSED) {
 			ws.send(data);
 		}
 	});
@@ -36,7 +36,7 @@ wss.on("connection", function(ws) {
 	});
 });
 
-app.use(express.static(__dirname + '../build'));
+app.use(express.static(__dirname + '/../build'));
 
 server.listen(process.env.PORT || 8999, () => {
     console.log(`Kelvin server started at port ${server.address().port} :)`);
