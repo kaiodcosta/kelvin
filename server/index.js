@@ -1,7 +1,14 @@
 const net = require("net");
+const http = require('http');
+const express = require('express');
 const WebSocket = require("ws");
 
-const wss = new WebSocket.Server({ port: 8080 });
+const app = express();
+
+const server = http.createServer(app);
+
+
+const wss = new WebSocket.Server({ server });
 
 wss.on("connection", function(ws) {
 	console.log("Connection from client established");
@@ -27,4 +34,10 @@ wss.on("connection", function(ws) {
 	ws.on("error", function(err) {
 		console.log(err);
 	});
+});
+
+app.use(express.static(__dirname + '../build'));
+
+server.listen(process.env.PORT || 8999, () => {
+    console.log(`Kelvin server started at port ${server.address().port} :)`);
 });

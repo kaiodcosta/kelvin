@@ -20,7 +20,8 @@ class App extends Component {
   }
 
   componentDidMount() {
-    const socket = new WebSocket("ws://localhost:8080");
+    const host = window.location.origin.replace(/^http/, 'ws');
+    const socket = new WebSocket(host);
 
     this.setState({ socket: socket });
     socket.addEventListener("message", event => {
