@@ -20,7 +20,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    const host = window.location.origin.replace(/^http/, 'ws');
+    const host = location.origin.replace(/^http/, 'ws');
     const socket = new WebSocket(host);
 
     this.setState({ socket: socket });
