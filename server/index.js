@@ -19,6 +19,10 @@ wss.on("connection", function(ws) {
 			ws.send(data);
 		}
 	});
+	fics.on("close", function() {
+		ws.close();
+		console.log("Connection from client closed\n");
+	});
 	ws.on("end", function() {
 		fics.end();
 		console.log("Connection ended\n");

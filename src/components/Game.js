@@ -1,4 +1,4 @@
-import React, { PureComponent } from "react";
+import React from "react";
 import { Chessground } from "chessground";
 import Chess from "chess.js";
 import "../assets/chessground.css";
@@ -17,11 +17,66 @@ function toDests(chess) {
 	return dests;
 }
 
-class Game extends PureComponent {
+class Timer extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			board: null
+			timer: props.start
+		};
+		this.timerID = null;
+	}
+	componentDidMount() {
+		if (!this.props.stopped) {
+			this.setTimerInterval();
+		}
+	}
+
+	setTimerInterval = () => {
+		if (this.timerID) {
+			clearInterval(this.timerID);
+		}
+
+		this.timerID = setInterval(() => {
+			this.setState({
+				timer: this.state.timer - 1
+			});
+		}, 1000);
+	};
+
+	componentDidUpdate(prevProps) {
+		if (this.state.timer === 0 || this.props.stopped) {
+			clearInterval(this.timerID);
+		}
+		if (
+			this.props.start !== prevProps.start ||
+			this.props.stopped !== prevProps.stopped
+		) {
+			this.setState({ timer: this.props.start });
+			this.setTimerInterval();
+		}
+	}
+
+	componentWillUnmount() {
+		clearInterval(this.timerID);
+	}
+
+	render() {
+		console.log("Timer component rendered");
+		return (
+			<div>
+				{Math.floor(this.state.timer / 60)}:{this.state.timer % 60}
+			</div>
+		);
+	}
+}
+
+class Game extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			board: null,
+			whiteTime: 0,
+			blackTime: 0
 		};
 		this.onMove = this.onMove.bind(this);
 		this.updateBoard = this.updateBoard.bind(this);
@@ -39,6 +94,17 @@ class Game extends PureComponent {
 			let moveNumber = this.props.game.split(" ")[26];
 			let move = this.props.game.split(" ")[29];
 			let color = this.props.game.split(" ")[9];
+			let increment = this.props.game.split(" ")[21];
+
+			/*
+			this.setState({
+				whiteTime: parseInt(this.props.game.split(" ")[24])
+			});
+			this.setState({
+				whiteTime: parseInt(this.props.game.split(" ")[25])
+			});
+			*/
+
 			// castle move not verbose
 
 			// let lastMove = this.props.game.split(" ")[27].split("/")[1].split("-");
@@ -59,6 +125,21 @@ class Game extends PureComponent {
 				},
 				orientation: flip === "0" ? "white" : "black"
 			});
+
+			/*
+			if (color === "white") {
+				console.log("it's white's turn");
+				this.whiteTimer = setInterval(() => {
+					this.whiteTime = this.whiteTime - 1 + parseInt(increment);
+				}, 1000);
+				clearInterval(this.blackTimer);
+			} else {
+				console.log("it's black's turn");
+				this.blackTimer = setInterval(() => {
+					this.blackTime = this.blackTime - 1 + parseInt(increment);
+				}, 1000);
+				clearInterval(this.whiteTimer);
+			}*/
 		}
 	}
 	componentDidMount() {
@@ -70,18 +151,41 @@ class Game extends PureComponent {
 		});
 	}
 
+	shouldComponentUpdate(nextProps) {
+		return this.props.game !== nextProps.game;
+	}
+
 	componentDidUpdate() {
 		this.updateBoard();
 	}
+
 	render() {
+		console.log("Game component rendered");
+
 		let white = (
 			<CardHeader>
-				<span> {this.props.game.split(" ")[17]}</span>
+				<span style={{ float: "left" }}>
+					{this.props.game.split(" ")[17]}
+				</span>
+				<span style={{ float: "right" }}>
+					<Timer
+						start={parseInt(this.props.game.split(" ")[24]) || 0}
+						stopped={this.props.game.split(" ")[9] === "B"}
+					/>
+				</span>
 			</CardHeader>
 		);
 		let black = (
 			<CardFooter>
-				<span> {this.props.game.split(" ")[18]}</span>
+				<span style={{ float: "left" }}>
+					{this.props.game.split(" ")[18]}
+				</span>
+				<span style={{ float: "right" }}>
+					<Timer
+						start={parseInt(this.props.game.split(" ")[25]) || 0}
+						stopped={this.props.game.split(" ")[9] === "W"}
+					/>
+				</span>
 			</CardFooter>
 		);
 		return (

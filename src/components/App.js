@@ -7,7 +7,8 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      socket: null,
+      socket: new WebSocket("ws://localhost:8999"),
+      status: 0,
       messages: [],
       game: ""
     };
@@ -20,11 +21,10 @@ class App extends Component {
   }
 
   componentDidMount() {
-    const host = location.origin.replace(/^http/, 'ws');
-    const socket = new WebSocket(host);
-
-    this.setState({ socket: socket });
-    socket.addEventListener("message", event => {
+    this.state.socket.addEventListener("open", event => {
+      this.setState({ status: 1 });
+    });
+    this.state.socket.addEventListener("message", event => {
       console.log("Message from server ", event.data);
 
       /*
@@ -50,6 +50,16 @@ class App extends Component {
         messages: [...this.state.messages, event.data]
       });
     });
+    this.state.socket.addEventListener("error", event => {
+      this.setState({ status: -1 });
+    });
+    this.state.socket.addEventListener("close", event => {
+      this.setState({ status: 0 });
+    });
+  }
+
+  componentWillUnmount() {
+    this.state.socket.close();
   }
   render() {
     return (
@@ -61,6 +71,7 @@ class App extends Component {
             </Col>
             <Col xs="6" className="mt-4">
               <Console
+                status={this.state.status}
                 messages={this.state.messages}
                 onCommand={this.sendCommand}
               />

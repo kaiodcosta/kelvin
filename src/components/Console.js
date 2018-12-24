@@ -1,13 +1,6 @@
 import React, { Component } from "react";
 import { Card } from "reactstrap";
-import {
-	Button,
-	Form,
-	FormGroup,
-	Input,
-	InputGroup,
-	InputGroupAddon
-} from "reactstrap";
+import { Form, Input, InputGroup, InputGroupAddon, Badge } from "reactstrap";
 import { ListGroup, ListGroupItem } from "reactstrap";
 
 const cardStyle = {
@@ -20,7 +13,8 @@ class Console extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			command: ""
+			command: "",
+			status: 0
 		};
 		this.handleChange = this.handleChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
@@ -48,6 +42,12 @@ class Console extends Component {
 		this.scrollToBottom();
 	}
 	render() {
+		let status =
+			this.props.status === 1 ? (
+				<Badge color="success">Connected</Badge>
+			) : (
+				<Badge color="danger">Disconnected</Badge>
+			);
 		let messages = this.props.messages.map((message, key) => {
 			return (
 				<ListGroupItem key={key}>
@@ -55,8 +55,10 @@ class Console extends Component {
 				</ListGroupItem>
 			);
 		});
+
 		return (
 			<Card border-primary body>
+				{status}
 				<Card style={cardStyle}>
 					<ListGroup>
 						{messages}
@@ -74,7 +76,7 @@ class Console extends Component {
 							type="text"
 							name="command"
 							id="command"
-							placeholder="write a command ..."
+							placeholder="type a command ..."
 							value={this.state.command}
 							onChange={this.handleChange}
 							size="sm"
